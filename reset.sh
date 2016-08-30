@@ -13,7 +13,7 @@ reset_trello() {
 
 reset_local_git() {
     echo "Resetting local repo..."
-    reset_sha="2bb4bff964c30a38eb219108f152a3aeaa18c8a3"
+    reset_sha="1596b84bf24e71751ac642c512e31ace76a6bd65"
     git checkout master
     git branch -D update-button || true
     git reset --hard "$reset_sha"
