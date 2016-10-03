@@ -25,7 +25,7 @@ recreate_local_project() {
 
 reset_github() {
     echo "Deleting gh repo..."
-    curl -sS -u "$GH_USER:$GH_TOKEN" -X DELETE "https://api.github.com/repos/$GH_USER/$GH_REPO" > /dev/null
+    curl -sS -u "$GH_USER:$GH_TOKEN" -X DELETE "https://api.github.com/repos/$1" > /dev/null
     echo "Recreating gh repo..."
     curl -sS -u "$GH_USER:$GH_TOKEN" -X POST -d @- "https://api.github.com/user/repos" > /dev/null <<EOF
 {
@@ -60,9 +60,13 @@ EOF
 
 source secrets
 
+to_delete="$GH_USER/$GH_REPO"
+echo "WARNING: $to_delete will be deleted/recreated. Are you sure you want to proceed? (y/n)"
+read confirm
+[[ $confirm = "y" ]] || exit 1
 reset_trello
 recreate_local_project
 (cd fantasticorp-home-temp && recreate_local_repo)
-(cd fantasticorp-home-temp && reset_github)
+(cd fantasticorp-home-temp && reset_github "$to_delete")
 reset_circle_project
 (cd fantasticorp-home-temp && recreate_pr)
