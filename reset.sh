@@ -11,12 +11,18 @@ reset_trello() {
     curl -sS -X PUT "https://api.trello.com/1/cards/$card/idList?key=$TRELLO_KEY&token=$TRELLO_TOKEN&value=$pr_list" > /dev/null
 }
 
-reset_local_git() {
-    echo "Resetting local repo..."
-    reset_sha="1596b84bf24e71751ac642c512e31ace76a6bd65"
-    git checkout master
-    git branch -D update-button || true
-    git reset --hard "$reset_sha"
+recreate_local_repo() {
+    echo "Recreating local repo..."
+    git init
+    git add -A
+    git remote add origin git@github.com:bellkev/fantasticorp-home.git
+    git commit -am "Initial commit"
+}
+
+recreate_local_project() {
+    echo "Recreating local project..."
+    rm -rf fantasticorp-home-temp
+    cp -r fantasticorp-home-original fantasticorp-home-temp
 }
 
 reset_github() {
@@ -57,6 +63,8 @@ EOF
 source secrets
 
 reset_trello
-(cd ../fantasticorp-home && reset_local_git && reset_github)
+recreate_local_project
+(cd fantasticorp-home-temp && recreate_local_repo)
+(cd fantasticorp-home-temp && reset_github)
 reset_circle_project
-(cd ../fantasticorp-home && recreate_pr)
+(cd fantasticorp-home-temp && recreate_pr)
