@@ -6,16 +6,14 @@ set -e
 
 reset_trello() {
     echo "Resetting trello card..."
-    card="SH4Nw0Xt"
-    pr_list="5723d65380d5960bb11f079f"
-    curl -sS -X PUT "https://api.trello.com/1/cards/$card/idList?key=$TRELLO_KEY&token=$TRELLO_TOKEN&value=$pr_list" > /dev/null
+    curl -sS -X PUT "https://api.trello.com/1/cards/$TRELLO_CARD_ID/idList?key=$TRELLO_KEY&token=$TRELLO_TOKEN&value=$TRELLO_PR_LIST" > /dev/null
 }
 
 recreate_local_repo() {
     echo "Recreating local repo..."
     git init
     git add -A
-    git remote add origin git@github.com:bellkev/fantasticorp-home.git
+    git remote add origin git@github.com:${GH_USER}/${GH_REPO}.git
     git commit -am "Initial commit"
 }
 
@@ -27,11 +25,11 @@ recreate_local_project() {
 
 reset_github() {
     echo "Deleting gh repo..."
-    curl -sS -u "bellkev:$GH_TOKEN" -X DELETE "https://api.github.com/repos/bellkev/fantasticorp-home" > /dev/null
+    curl -sS -u "$GH_USER:$GH_TOKEN" -X DELETE "https://api.github.com/repos/$GH_USER/$GH_REPO" > /dev/null
     echo "Recreating gh repo..."
-    curl -sS -u "bellkev:$GH_TOKEN" -X POST -d @- "https://api.github.com/user/repos" > /dev/null <<EOF
+    curl -sS -u "$GH_USER:$GH_TOKEN" -X POST -d @- "https://api.github.com/user/repos" > /dev/null <<EOF
 {
-  "name": "fantasticorp-home",
+  "name": "$GH_REPO",
   "private": true
 }
 EOF
@@ -40,7 +38,7 @@ EOF
 
 reset_circle_project() {
     echo "Resetting circle project..."
-    ssh ubuntu@circle.fantasticorp.com "ENV_VAR_MAP='$ENV_VAR_MAP' bash" < remote-reset.sh
+    ssh ubuntu@${CIRCLE_HOST} "ENV_VAR_MAP='$ENV_VAR_MAP' bash" < remote-reset.sh
 }
 
 recreate_pr() {
@@ -49,7 +47,7 @@ recreate_pr() {
     sed -i '' 's_<a class="cta cta-red" href="#">Try it now</a>_<a class="cta cta-green" href="#">Sign up now</a>_' uwsgi/fantasticorp/templates/index.html
     git commit -am "Update button"
     git push origin update-button
-    curl -sS -u "bellkev:$GH_TOKEN" -X POST -d @- "https://api.github.com/repos/bellkev/fantasticorp-home/pulls" > /dev/null <<EOF
+    curl -sS -u "$GH_USER:$GH_TOKEN" -X POST -d @- "https://api.github.com/repos/$GH_USER/$GH_REPO/pulls" > /dev/null <<EOF
 {
   "title": "Update signup button",
   "body": "This is gonna triple our signups!",
