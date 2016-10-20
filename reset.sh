@@ -24,7 +24,7 @@ recreate_local_project() {
     sed -i '' 's_url([^"]*)_url('"$IMAGE_URL"')_' "$GH_REPO"-original/uwsgi/pixelgroup/templates/index.html
     sed -i '' 's_<h1 class="title">[a-zA-Z0-9]*</h1>_<h1 class="title">'"$COMPANY_NAME"'</h1>_' "$GH_REPO"-original/uwsgi/pixelgroup/templates/index.html
     sed -i '' 's_<span class="subtitle-question">[a-zA-Z0-9?!@#$%^&*. ]*</span>_<span class="subtitle-question"> '"$HEADLINE"'</span>_' "$GH_REPO"-original/uwsgi/pixelgroup/templates/index.html
-    sed -i '' 's_<p class="subtitle">[ a-zA-Z0-9.?! ]*</p>_<p>'"$ZINGER"'</p>_' "$GH_REPO"-original/uwsgi/pixelgroup/templates/index.html
+    sed -i '' 's_<p class="subtitle">[ a-zA-Z0-9.?! ]*</p>_<p class="subtitle">'"$ZINGER"'</p>_' "$GH_REPO"-original/uwsgi/pixelgroup/templates/index.html
 
 
     cp -r "$GH_REPO"-original "$GH_REPO"-temp
