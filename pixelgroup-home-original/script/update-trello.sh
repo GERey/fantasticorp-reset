@@ -5,8 +5,8 @@ set -o pipefail
 
 # requires $TRELLO_KEY $TRELLO_TOKEN $CIRCLE_PR_NUMBER
 
-pr_list="5723d65380d5960bb11f079f"
-deployed_list="5723d65712f3262f1b3bdc1f"
+pr_list="58011fc10d0c5d46896b405c"
+deployed_list="58011fc10d0c5d46896b405d"
 
 # args: $method $resource $value
 api_call() {
@@ -16,12 +16,16 @@ api_call() {
     curl -sS -X "$method" "https://api.trello.com/1/$resource?key=$TRELLO_KEY&token=$TRELLO_TOKEN&value=$value"
 }
 
+echo "Does this work?"
 if pr_cards=($(api_call GET "lists/$pr_list/cards" | jq -e -r '.[].id')); then
+    echo "hello"
     for card in "${pr_cards[@]}"; do
+        echo $card
         for url in "$(api_call GET "cards/$card/attachments" | jq -e -r '.[].url')"; do
             # if https://github.com/bellkev/fantasticorp-home/123 = Merge pull request #123 from ...
             if [[ $(grep -oP '\d+$' <<<"$url") = $(git log --format=%B -n 1 HEAD |grep -oP '#\K\d+') ]]; then
                 api_call PUT "cards/$card/idList" "$deployed_list"
+                echo "moved to $deployed_list"
             fi
         done
     done

@@ -19,8 +19,16 @@ recreate_local_repo() {
 
 recreate_local_project() {
     echo "Recreating local project..."
-    rm -rf fantasticorp-home-temp
-    cp -r fantasticorp-home-original fantasticorp-home-temp
+    rm -rf "$GH_REPO"-temp
+    #change the title of the project, and the subtitle /headline
+    sed -i '' 's_url([^"]*)_url('"$IMAGE_URL"')_' "$GH_REPO"-original/uwsgi/pixelgroup/templates/index.html
+    sed -i '' 's_<h1 class="title">[a-zA-Z0-9]*</h1>_<h1 class="title">'"$COMPANY_NAME"'</h1>_' "$GH_REPO"-original/uwsgi/pixelgroup/templates/index.html
+    sed -i '' 's_<span class="subtitle-question">[a-zA-Z0-9?!@#$%^&*. ]*</span>_<span class="subtitle-question"> '"$HEADLINE"'</span>_' "$GH_REPO"-original/uwsgi/pixelgroup/templates/index.html
+    sed -i '' 's_<p class="subtitle">[ a-zA-Z0-9.?! ]*</p>_<p>'"$ZINGER"'</p>_' "$GH_REPO"-original/uwsgi/pixelgroup/templates/index.html
+
+
+    cp -r "$GH_REPO"-original "$GH_REPO"-temp
+
 }
 
 reset_github() {
@@ -30,7 +38,7 @@ reset_github() {
     curl -sS -u "$GH_USER:$GH_TOKEN" -X POST -d @- "https://api.github.com/user/repos" > /dev/null <<EOF
 {
   "name": "$GH_REPO",
-  "private": true
+  "private": false
 }
 EOF
     git push -u origin master
@@ -38,13 +46,13 @@ EOF
 
 reset_circle_project() {
     echo "Resetting circle project..."
-    ssh ubuntu@${CIRCLE_HOST} "ENV_VAR_MAP='$ENV_VAR_MAP' bash" < remote-reset.sh
+    ssh -i $SSH_KEY ubuntu@${CIRCLE_HOST} "ENV_VAR_MAP='$ENV_VAR_MAP' GH_USER=$GH_USER GH_REPO=$GH_REPO bash" < remote-reset.sh
 }
 
 recreate_pr() {
     echo "Recreating feature branch and PR..."
     git checkout -b update-button
-    sed -i '' 's_<a class="cta cta-red" href="#">Try it now</a>_<a class="cta cta-green" href="#">Sign up now</a>_' uwsgi/fantasticorp/templates/index.html
+    sed -i '' 's_<a class="cta cta-red" href="#">Try it now</a>_<a class="cta cta-green" href="#">Sign up now</a>_' uwsgi/pixelgroup/templates/index.html
     git commit -am "Update button"
     git push origin update-button
     curl -sS -u "$GH_USER:$GH_TOKEN" -X POST -d @- "https://api.github.com/repos/$GH_USER/$GH_REPO/pulls" > /dev/null <<EOF
@@ -64,9 +72,9 @@ to_delete="$GH_USER/$GH_REPO"
 echo "WARNING: $to_delete will be deleted/recreated. Are you sure you want to proceed? (y/n)"
 read confirm
 [[ $confirm = "y" ]] || exit 1
-reset_trello
+ reset_trello
 recreate_local_project
-(cd fantasticorp-home-temp && recreate_local_repo)
-(cd fantasticorp-home-temp && reset_github "$to_delete")
+(cd "$GH_REPO"-temp && recreate_local_repo)
+(cd "$GH_REPO"-temp && reset_github "$to_delete")
 reset_circle_project
-(cd fantasticorp-home-temp && recreate_pr)
+(cd "$GH_REPO"-temp && recreate_pr)
