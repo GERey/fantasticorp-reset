@@ -17,18 +17,21 @@ recreate_local_repo() {
     git commit -am "Initial commit"
 }
 
-recreate_local_project() {
+recreate_local_project() { 
     echo "Recreating local project..."
     rm -rf fantasticorp-home-temp
-    #change the title of the project, and the subtitle /headline
-    sed -i '' 's_url([^"]*)_url('"$IMAGE_URL"')_' "$GH_REPO"-original/uwsgi/pixelgroup/templates/index.html
-    sed -i '' 's_<h1 class="title">[a-zA-Z0-9]*</h1>_<h1 class="title">'"$COMPANY_NAME"'</h1>_' "$GH_REPO"-original/uwsgi/pixelgroup/templates/index.html
-    sed -i '' 's_<span class="subtitle-question">[a-zA-Z0-9?!@#$%^&*. ]*</span>_<span class="subtitle-question"> '"$HEADLINE"'</span>_' "$GH_REPO"-original/uwsgi/pixelgroup/templates/index.html
-    sed -i '' 's_<p class="subtitle">[a-zA-Z0-9.?! ]*</p>_<p class="subtitle">'"$ZINGER"'</p>_' "$GH_REPO"-original/uwsgi/pixelgroup/templates/index.html
-
-
     cp -r fantasticorp-home-original fantasticorp-home-temp
 
+    #change the title of the project, and the subtitle /headline
+    sed -i '' 's_url({{IMAGE}})_url('"$IMAGE_URL"')_' fantasticorp-home-temp/uwsgi/fantasticorp/templates/index.html
+    sed -i '' 's_<h1 class="title">{{TITLE}}</h1>_<h1 class="title">'"$COMPANY_NAME"'</h1>_' fantasticorp-home-temp/uwsgi/fantasticorp/templates/index.html
+    sed -i '' 's_<span class="subtitle-question"> {{SUBTITLE-QUESTION}}</span>_<span class="subtitle-question"> '"$HEADLINE"'</span>_' fantasticorp-home-temp/uwsgi/fantasticorp/templates/index.html
+    sed -i '' 's_<p class="subtitle">{{SUBTITLE}}</p>_<p class="subtitle">'"$ZINGER"'</p>_' fantasticorp-home-temp/uwsgi/fantasticorp/templates/index.html
+
+    #Change the circle.yml
+    sed -i '' "s/{GH-USER}/${GH_USER_LOWERCASE}/" fantasticorp-home-temp/circle.yml
+
+    sed -i '' "s/{GH-USER}/${GH_USER_LOWERCASE}/" fantasticorp-home-temp/docker-compose.yml
 }
 
 reset_github() {
@@ -52,7 +55,7 @@ reset_circle_project() {
 recreate_pr() {
     echo "Recreating feature branch and PR..."
     git checkout -b update-button
-    sed -i '' 's_<a class="cta cta-red" href="#">Try it now</a>_<a class="cta cta-green" href="#">Sign up now</a>_' uwsgi/pixelgroup/templates/index.html
+    sed -i '' 's_<a class="cta cta-red" href="#">Try it now</a>_<a class="cta cta-green" href="#">Sign up now</a>_' uwsgi/fantasticorp/templates/index.html
     git commit -am "Update button"
     git push origin update-button
     curl -sS -u "$GH_USER:$GH_TOKEN" -X POST -d @- "https://api.github.com/repos/$GH_USER/$GH_REPO/pulls" > /dev/null <<EOF
@@ -74,7 +77,7 @@ read confirm
 [[ $confirm = "y" ]] || exit 1
  reset_trello
 recreate_local_project
-(cd "$GH_REPO"-temp && recreate_local_repo)
-(cd "$GH_REPO"-temp && reset_github "$to_delete")
+(cd fantasticorp-home-temp && recreate_local_repo)
+(cd fantasticorp-home-temp && reset_github "$to_delete")
 reset_circle_project
-(cd "$GH_REPO"-temp && recreate_pr)
+(cd fantasticorp-home-temp && recreate_pr)

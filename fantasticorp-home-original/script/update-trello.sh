@@ -5,8 +5,8 @@ set -o pipefail
 
 # requires $TRELLO_KEY $TRELLO_TOKEN $CIRCLE_PR_NUMBER
 
-pr_list="58011fc10d0c5d46896b405c"
-deployed_list="58011fc10d0c5d46896b405d"
+pr_list="$TRELLO_PR_LIST"
+deployed_list="$TRELLO_DEPLOY_LIST"
 
 # args: $method $resource $value
 api_call() {

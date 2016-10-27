@@ -3,7 +3,7 @@ from jinja2 import Environment, PackageLoader
 
 
 app = Flask(__name__)
-env = Environment(loader=PackageLoader('pixelgroup', 'templates'))
+env = Environment(loader=PackageLoader('fantasticorp', 'templates'))
 
 @app.route('/')
 def hello():

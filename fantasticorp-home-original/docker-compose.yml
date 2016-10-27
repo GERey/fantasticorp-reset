@@ -1,7 +1,7 @@
 uwsgi:
-  image: "${GH_USER_LOWERCASE}/${GH_REPO_LOWERCASE}-uwsgi:$IMAGE_TAG"
+  image: "{GH-USER}/fantasticorp-home-uwsgi:$IMAGE_TAG"
 nginx:
-  image: "${GH_USER_LOWERCASE}/${GH_REPO_LOWERCASE}-nginx:$IMAGE_TAG"
+  image: "{GH-USER}/fantasticorp-home-nginx:$IMAGE_TAG"
   links:
     - uwsgi
   expose:
