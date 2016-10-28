@@ -17,7 +17,7 @@ recreate_local_repo() {
     git commit -am "Initial commit"
 }
 
-recreate_local_project() { 
+recreate_local_project() {
     echo "Recreating local project..."
     rm -rf fantasticorp-home-temp
     cp -r fantasticorp-home-original fantasticorp-home-temp
@@ -37,6 +37,10 @@ recreate_local_project() {
 
     sed -i '' "s/{GH-USER}/${GH_USER_LOWERCASE}/" fantasticorp-home-temp/script/deploy.sh
     sed -i '' "s/{GH-REPO}/${GH_REPO}/" fantasticorp-home-temp/script/deploy.sh
+    if [[ -z $TRELLO_KEY ]]; then
+        rm fantasticorp-home-temp/script/update-trello.sh
+        sed -i '' '/update-trello/d' fantasticorp-home-temp/circle.yml
+    fi
 }
 
 reset_github() {
@@ -80,7 +84,7 @@ to_delete="$GH_USER/$GH_REPO"
 echo "WARNING: $to_delete will be deleted/recreated. Are you sure you want to proceed? (y/n)"
 read confirm
 [[ $confirm = "y" ]] || exit 1
- reset_trello
+if [[ $TRELLO_KEY ]]; then reset_trello; fi
 recreate_local_project
 (cd fantasticorp-home-temp && recreate_local_repo)
 (cd fantasticorp-home-temp && reset_github "$to_delete")

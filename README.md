@@ -2,6 +2,8 @@
 
 There are 7 steps to setting up a demo.
 
+NOTE: reset.sh assumes BSD (mac) `sed`
+
 1. Register a domain name of your choice like fantasticorp.click
 2. Create instance of CCIE, give it a hostname like circleci.fantasticorp.click.
 	* Follow the instructions here to create an instance of CCIE `https://circleci.com/docs/enterprise/aws/`
