@@ -21,6 +21,26 @@ recreate_local_project() {
     echo "Recreating local project..."
     rm -rf fantasticorp-home-temp
     cp -r fantasticorp-home-original fantasticorp-home-temp
+
+    #change the title of the project, and the subtitle /headline
+    sed -i '' "s_{{IMAGE}}_${IMAGE_URL}_" fantasticorp-home-temp/uwsgi/fantasticorp/templates/index.html
+    sed -i '' "s/{{TITLE}}/$COMPANY_NAME/" fantasticorp-home-temp/uwsgi/fantasticorp/templates/index.html
+    sed -i '' "s/{{SUBTITLE-QUESTION}}/$HEADLINE/" fantasticorp-home-temp/uwsgi/fantasticorp/templates/index.html
+    sed -i '' "s/{{SUBTITLE}}/$ZINGER/" fantasticorp-home-temp/uwsgi/fantasticorp/templates/index.html
+
+    #Change the circle.yml
+    sed -i '' "s/{GH-USER}/${GH_USER_LOWERCASE}/" fantasticorp-home-temp/circle.yml
+    sed -i '' "s/{GH-USER}/${GH_USER_LOWERCASE}/" fantasticorp-home-temp/docker-compose.yml
+
+    sed -i '' "s/{GH-REPO}/${GH_REPO}/" fantasticorp-home-temp/circle.yml
+    sed -i '' "s/{GH-REPO}/${GH_REPO}/" fantasticorp-home-temp/docker-compose.yml
+
+    sed -i '' "s/{GH-USER}/${GH_USER_LOWERCASE}/" fantasticorp-home-temp/script/deploy.sh
+    sed -i '' "s/{GH-REPO}/${GH_REPO}/" fantasticorp-home-temp/script/deploy.sh
+    if [[ -z $TRELLO_KEY ]]; then
+        rm fantasticorp-home-temp/script/update-trello.sh
+        sed -i '' '/update-trello/d' fantasticorp-home-temp/circle.yml
+    fi
 }
 
 reset_github() {
@@ -30,7 +50,7 @@ reset_github() {
     curl -sS -u "$GH_USER:$GH_TOKEN" -X POST -d @- "https://api.github.com/user/repos" > /dev/null <<EOF
 {
   "name": "$GH_REPO",
-  "private": true
+  "private": false
 }
 EOF
     git push -u origin master
@@ -38,7 +58,7 @@ EOF
 
 reset_circle_project() {
     echo "Resetting circle project..."
-    ssh ubuntu@${CIRCLE_HOST} "ENV_VAR_MAP='$ENV_VAR_MAP' bash" < remote-reset.sh
+    ssh -i $SSH_KEY ubuntu@${CIRCLE_HOST} "ENV_VAR_MAP='$ENV_VAR_MAP' GH_USER=$GH_USER GH_REPO=$GH_REPO bash" < remote-reset.sh
 }
 
 recreate_pr() {
@@ -64,7 +84,7 @@ to_delete="$GH_USER/$GH_REPO"
 echo "WARNING: $to_delete will be deleted/recreated. Are you sure you want to proceed? (y/n)"
 read confirm
 [[ $confirm = "y" ]] || exit 1
-reset_trello
+if [[ $TRELLO_KEY ]]; then reset_trello; fi
 recreate_local_project
 (cd fantasticorp-home-temp && recreate_local_repo)
 (cd fantasticorp-home-temp && reset_github "$to_delete")

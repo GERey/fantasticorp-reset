@@ -3,10 +3,10 @@
 set -e
 set -o pipefail
 
-# requires $TRELLO_KEY $TRELLO_TOKEN $CIRCLE_PR_NUMBER
+# requires $TRELLO_KEY $TRELLO_TOKEN $TRELLO_PR_LIST $TRELLO_DEPLOY_LIST
 
-pr_list="5723d65380d5960bb11f079f"
-deployed_list="5723d65712f3262f1b3bdc1f"
+pr_list="$TRELLO_PR_LIST"
+deployed_list="$TRELLO_DEPLOY_LIST"
 
 # args: $method $resource $value
 api_call() {

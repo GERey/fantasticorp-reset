@@ -17,7 +17,7 @@ task_definition() {
 [
     {
         "name": "uwsgi",
-        "image": "bellkev/fantasticorp-home-uwsgi:$tag",
+        "image": "{GH-USER}/{GH-REPO}-uwsgi:$tag",
         "essential": true,
         "memory": 200,
         "cpu": 10
@@ -27,7 +27,7 @@ task_definition() {
         "links": [
             "uwsgi"
         ],
-        "image": "bellkev/fantasticorp-home-nginx:$tag",
+        "image": "{GH-USER}/{GH-REPO}-nginx:$tag",
         "portMappings": [
             {
                 "containerPort": 8000,
@@ -59,8 +59,8 @@ register_definition() {
 # args: $service
 deploy() {
     service="$1"
-    family="fantasticorp-home"
-    cluster="fantasticorp-home"
+    family="{GH-REPO}"
+    cluster="{GH-REPO}"
     tag="${CIRCLE_SHA1}-${CIRCLE_BUILD_NUM}"
     task_def="$(task_definition "$tag")"
     revision="$(register_definition "$family" "$task_def")"
@@ -71,6 +71,6 @@ deploy() {
 }
 
 case "$1" in
-    staging) deploy "fantasticorp-home-staging" ;;
-    prod) deploy "fantasticorp-home" ;;
+    staging) deploy "{GH-REPO}-staging" ;;
+    prod) deploy "{GH-REPO}" ;;
 esac
