@@ -23,10 +23,10 @@ recreate_local_project() {
     cp -r fantasticorp-home-original fantasticorp-home-temp
 
     #change the title of the project, and the subtitle /headline
-    sed -i '' 's_url({{IMAGE}})_url('"$IMAGE_URL"')_' fantasticorp-home-temp/uwsgi/fantasticorp/templates/index.html
-    sed -i '' 's_<h1 class="title">{{TITLE}}</h1>_<h1 class="title">'"$COMPANY_NAME"'</h1>_' fantasticorp-home-temp/uwsgi/fantasticorp/templates/index.html
-    sed -i '' 's_<span class="subtitle-question"> {{SUBTITLE-QUESTION}}</span>_<span class="subtitle-question"> '"$HEADLINE"'</span>_' fantasticorp-home-temp/uwsgi/fantasticorp/templates/index.html
-    sed -i '' 's_<p class="subtitle">{{SUBTITLE}}</p>_<p class="subtitle">'"$ZINGER"'</p>_' fantasticorp-home-temp/uwsgi/fantasticorp/templates/index.html
+    sed -i '' "s_{{IMAGE}}_${IMAGE_URL}_" fantasticorp-home-temp/uwsgi/fantasticorp/templates/index.html
+    sed -i '' "s/{{TITLE}}/$COMPANY_NAME/" fantasticorp-home-temp/uwsgi/fantasticorp/templates/index.html
+    sed -i '' "s/{{SUBTITLE-QUESTION}}/$HEADLINE/" fantasticorp-home-temp/uwsgi/fantasticorp/templates/index.html
+    sed -i '' "s/{{SUBTITLE}}/$ZINGER/" fantasticorp-home-temp/uwsgi/fantasticorp/templates/index.html
 
     #Change the circle.yml
     sed -i '' "s/{GH-USER}/${GH_USER_LOWERCASE}/" fantasticorp-home-temp/circle.yml
