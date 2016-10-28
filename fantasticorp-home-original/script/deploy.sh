@@ -17,7 +17,7 @@ task_definition() {
 [
     {
         "name": "uwsgi",
-        "image": "${GH_USER_LOWERCASE}/${GH_REPO_LOWERCASE}-uwsgi:$tag",
+        "image": "{GH-USER}/{GH-REPO}-uwsgi:$tag",
         "essential": true,
         "memory": 200,
         "cpu": 10
@@ -27,7 +27,7 @@ task_definition() {
         "links": [
             "uwsgi"
         ],
-        "image": "${GH_USER_LOWERCASE}/${GH_REPO_LOWERCASE}-nginx:$tag",
+        "image": "{GH-USER}/{GH-REPO}-nginx:$tag",
         "portMappings": [
             {
                 "containerPort": 8000,
@@ -59,8 +59,8 @@ register_definition() {
 # args: $service
 deploy() {
     service="$1"
-    family="${GH_REPO_LOWERCASE}"
-    cluster="${GH_REPO_LOWERCASE}"
+    family="{GH-REPO}"
+    cluster="{GH-REPO}"
     tag="${CIRCLE_SHA1}-${CIRCLE_BUILD_NUM}"
     task_def="$(task_definition "$tag")"
     revision="$(register_definition "$family" "$task_def")"
@@ -71,6 +71,6 @@ deploy() {
 }
 
 case "$1" in
-    staging) deploy "${GH_REPO_LOWERCASE}-staging" ;;
-    prod) deploy "${GH_REPO_LOWERCASE}" ;;
+    staging) deploy "{GH-REPO}-staging" ;;
+    prod) deploy "{GH-REPO}" ;;
 esac

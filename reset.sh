@@ -34,6 +34,9 @@ recreate_local_project() {
 
     sed -i '' "s/{GH-REPO}/${GH_REPO}/" fantasticorp-home-temp/circle.yml
     sed -i '' "s/{GH-REPO}/${GH_REPO}/" fantasticorp-home-temp/docker-compose.yml
+
+    sed -i '' "s/{GH-USER}/${GH_USER_LOWERCASE}/" fantasticorp-home-temp/script/deploy.sh
+    sed -i '' "s/{GH-REPO}/${GH_REPO}/" fantasticorp-home-temp/script/deploy.sh
 }
 
 reset_github() {
