@@ -30,8 +30,10 @@ recreate_local_project() {
 
     #Change the circle.yml
     sed -i '' "s/{GH-USER}/${GH_USER_LOWERCASE}/" fantasticorp-home-temp/circle.yml
-
     sed -i '' "s/{GH-USER}/${GH_USER_LOWERCASE}/" fantasticorp-home-temp/docker-compose.yml
+
+    sed -i '' "s/{GH-REPO}/${GH_REPO}/" fantasticorp-home-temp/circle.yml
+    sed -i '' "s/{GH-REPO}/${GH_REPO}/" fantasticorp-home-temp/docker-compose.yml
 }
 
 reset_github() {
