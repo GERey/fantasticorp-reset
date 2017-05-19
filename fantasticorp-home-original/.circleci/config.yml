@@ -6,15 +6,16 @@ jobs:
       IMAGE_TAG: ${CIRCLE_SHA1}-${CIRCLE_BUILD_NUM}
       COMPOSE_PROJECT_NAME: ${CIRCLE_BUILD_NUM}
 
-
     # In 2.0, we specify our Ruby version by using a public Docker image
     docker:
        - image: library/docker:17
 
-    - setup_remote_docker
+
 
     steps:
       - checkout
+
+      - setup_remote_docker
       
       - run: docker build -t {GH-USER}/{GH-REPO}-uwsgi:$IMAGE_TAG uwsgi
       - run: docker build -t {GH-USER}/{GH-REPO}-nginx:$IMAGE_TAG nginx
