@@ -28,18 +28,18 @@ recreate_local_project() {
     sed -i '' "s/{{SUBTITLE-QUESTION}}/$HEADLINE/" fantasticorp-home-temp/uwsgi/fantasticorp/templates/index.html
     sed -i '' "s/{{SUBTITLE}}/$ZINGER/" fantasticorp-home-temp/uwsgi/fantasticorp/templates/index.html
 
-    #Change the circle.yml
-    sed -i '' "s/{GH-USER}/${GH_USER_LOWERCASE}/" fantasticorp-home-temp/circle.yml
+    #Change the config.yml
+    sed -i '' "s/{GH-USER}/${GH_USER_LOWERCASE}/" fantasticorp-home-temp/.circleci/config.yml
     sed -i '' "s/{GH-USER}/${GH_USER_LOWERCASE}/" fantasticorp-home-temp/docker-compose.yml
 
-    sed -i '' "s/{GH-REPO}/${GH_REPO}/" fantasticorp-home-temp/circle.yml
+    sed -i '' "s/{GH-REPO}/${GH_REPO}/" fantasticorp-home-temp/.circleci/config.yml
     sed -i '' "s/{GH-REPO}/${GH_REPO}/" fantasticorp-home-temp/docker-compose.yml
 
     sed -i '' "s/{GH-USER}/${GH_USER_LOWERCASE}/" fantasticorp-home-temp/script/deploy.sh
     sed -i '' "s/{GH-REPO}/${GH_REPO}/" fantasticorp-home-temp/script/deploy.sh
     if [[ -z $TRELLO_KEY ]]; then
         rm fantasticorp-home-temp/script/update-trello.sh
-        sed -i '' '/update-trello/d' fantasticorp-home-temp/circle.yml
+        sed -i '' '/update-trello/d' fantasticorp-home-temp/.circleci/config.yml
     fi
 }
 

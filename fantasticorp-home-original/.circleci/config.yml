@@ -8,7 +8,7 @@ jobs:
 
 
     # In 2.0, we specify our Ruby version by using a public Docker image
-    # docker:
+    docker:
        - image: library/docker:17
 
     - setup_remote_docker
