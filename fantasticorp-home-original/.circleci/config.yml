@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: /tmp
+    working_directory: pixelgroup-home-two-dot-o
     environment:
       IMAGE_TAG: ${CIRCLE_SHA1}-${CIRCLE_BUILD_NUM}
       COMPOSE_PROJECT_NAME: ${CIRCLE_BUILD_NUM}
