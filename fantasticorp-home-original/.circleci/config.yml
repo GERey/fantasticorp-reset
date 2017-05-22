@@ -20,7 +20,7 @@ jobs:
       - run: docker build -t {GH-USER}/{GH-REPO}-uwsgi:${CIRCLE_SHA1}-${CIRCLE_BUILD_NUM} uwsgi
       - run: docker build -t {GH-USER}/{GH-REPO}-nginx:${CIRCLE_SHA1}-${CIRCLE_BUILD_NUM} nginx
       - run: docker build -t {GH-REPO}-test test
-      - run: xxd -l 8 -p /dev/urandom > test_container_name
+     # - run: xxd -l 8 -p /dev/urandom > test_container_name
 
       - run: docker-compose up -d
       - run: docker run --link ${CIRCLE_BUILD_NUM}_nginx_1:nginx --name $(cat test_container_name) {GH-REPO}-test
