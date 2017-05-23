@@ -23,7 +23,7 @@ jobs:
       - run: docker build -t {GH-REPO}-test test
       - run: xxd -l 8 -p /dev/urandom > test_container_name
 
-      - run: docker-compose up -d -p ${CIRCLE_BUILD_NUM}
+      - run: docker-compose -p ${CIRCLE_BUILD_NUM} up -d
       - run: docker run --link ${CIRCLE_BUILD_NUM}_nginx_1:nginx --name $(cat test_container_name) {GH-REPO}-test
       - run: docker cp $(cat test_container_name):/nosetests.xml $CIRCLE_TEST_REPORTS
       - run: docker-compose kill || true
