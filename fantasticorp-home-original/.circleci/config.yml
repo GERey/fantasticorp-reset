@@ -29,7 +29,7 @@ jobs:
       - run: mkdir test-reports
       - run: docker cp $(cat test_container_name):/nosetests.xml test-reports/.
       - store_artifacts:
-            path: test-results
+            path: test-reports
 
       - store_test_results:
           path: test-reports/
