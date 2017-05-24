@@ -26,9 +26,13 @@ jobs:
       - run: docker-compose -p ${CIRCLE_BUILD_NUM} up -d
       - run: docker run --link ${CIRCLE_BUILD_NUM}_nginx_1:nginx --name $(cat test_container_name) {GH-REPO}-test
       
-      - run: docker cp $(cat test_container_name):/nosetests.xml /tmp/test-reports/.
+      - run: mkdir test-reports
+      - run: docker cp $(cat test_container_name):/nosetests.xml test-reports/.
+      - store_artifacts:
+            path: test-results
+
       - store_test_results:
-          path: /tmp/test-results
+          path: test-reports/
       - run: docker-compose kill || true
 # deployment:
 #   staging:
