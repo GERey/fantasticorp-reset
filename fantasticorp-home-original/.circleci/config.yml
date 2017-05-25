@@ -27,11 +27,11 @@ jobs:
       - run: docker run --link ${CIRCLE_BUILD_NUM}_nginx_1:nginx --name $(cat test_container_name) {GH-REPO}-test
      
       - run:
-	   when: always
-           command: |
-             mkdir test-reports
-             docker cp $(cat test_container_name):/nosetests.xml test-reports/.
-             docker-compose kill || true
+          when: always
+          command: |
+            mkdir test-reports
+            docker cp $(cat test_container_name):/nosetests.xml test-reports/.
+            docker-compose kill || true
       
       - store_artifacts:
             path: test-reports
