@@ -57,8 +57,10 @@ EOF
 }
 
 reset_circle_project() {
-    echo "Resetting circle project..."
-    ssh -i $SSH_KEY ubuntu@${CIRCLE_HOST} "ENV_VAR_MAP='$ENV_VAR_MAP' GH_USER=$GH_USER GH_REPO=$GH_REPO bash" < remote-reset.sh
+    echo "Resetting circle project..."    
+    curl -sS -H 'Content-Type:application/json; charset=UTF-8' "https://circleci.com/api/v1.1/project/github/GERey/pixelgroup-home-two-dot-o/envvar?circle-token=$CIRCLE_TOKEN"  --data-binary '{"name":"GH_USER","value": "'"$GH_USER"'"}'
+
+    #ssh -i $SSH_KEY ubuntu@${CIRCLE_HOST} "ENV_VAR_MAP='$ENV_VAR_MAP' GH_USER=$GH_USER GH_REPO=$GH_REPO bash" < remote-reset.sh
 }
 
 recreate_pr() {
@@ -80,13 +82,13 @@ EOF
 
 source secrets
 
-to_delete="$GH_USER/$GH_REPO"
-echo "WARNING: $to_delete will be deleted/recreated. Are you sure you want to proceed? (y/n)"
-read confirm
-[[ $confirm = "y" ]] || exit 1
-if [[ $TRELLO_KEY ]]; then reset_trello; fi
-recreate_local_project
-(cd fantasticorp-home-temp && recreate_local_repo)
-(cd fantasticorp-home-temp && reset_github "$to_delete")
+#to_delete="$GH_USER/$GH_REPO"
+#echo "WARNING: $to_delete will be deleted/recreated. Are you sure you want to proceed? (y/n)"
+#read confirm
+#[[ $confirm = "y" ]] || exit 1
+#if [[ $TRELLO_KEY ]]; then reset_trello; fi
+#recreate_local_project
+#(cd fantasticorp-home-temp && recreate_local_repo)
+#(cd fantasticorp-home-temp && reset_github "$to_delete")
 reset_circle_project
-(cd fantasticorp-home-temp && recreate_pr)
+#(cd fantasticorp-home-temp && recreate_pr)
