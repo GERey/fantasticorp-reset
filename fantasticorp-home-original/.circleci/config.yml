@@ -25,6 +25,8 @@ jobs:
     docker:
       - image: gerey/saasdemo-docker-image:latest
     steps:
+      - checkout
+
       - setup_remote_docker:
           reusable: true
 
@@ -51,6 +53,7 @@ jobs:
     docker:
       - image: gerey/saasdemo-docker-image:latest
     steps:
+      - checkout
 
       - setup_remote_docker:
           reusable: true
