@@ -14,9 +14,6 @@ jobs:
 
       - setup_remote_docker:
           reusable: true
-          # run tests run on separate docker engines to avoid interference and
-          # and resource contention
-          exclusive: true
       
       - run: docker build -t {GH-USER}/{GH-REPO}-uwsgi:${CIRCLE_SHA1}-${CIRCLE_BUILD_NUM} uwsgi
       - run: docker build -t {GH-USER}/{GH-REPO}-nginx:${CIRCLE_SHA1}-${CIRCLE_BUILD_NUM} nginx
@@ -30,9 +27,6 @@ jobs:
     steps:
       - setup_remote_docker:
           reusable: true
-          # run tests run on separate docker engines to avoid interference and
-          # and resource contention
-          exclusive: true
 
       - run: xxd -l 8 -p /dev/urandom > test_container_name
       - run: docker-compose -p ${CIRCLE_BUILD_NUM} up -d
@@ -60,10 +54,7 @@ jobs:
 
       - setup_remote_docker:
           reusable: true
-          # run tests run on separate docker engines to avoid interference and
-          # and resource contention
-          exclusive: true
-          
+
       - run:
         command: |
           if [ "${CIRCLE_BRANCH}" == "master" ]; then
@@ -85,14 +76,14 @@ jobs:
 #       - script/update-trello.sh
 #       - script/deploy.sh prod
 
-# workflows:
-#   version: 2
-#   test-and-deploy:
-#     jobs:
-#       - build
-#       - test:
-#           requires:
-#             - build
-#       - deploy:
-#           requires:
-#             - test
+workflows:
+  version: 2
+  test-and-deploy:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - deploy:
+          requires:
+            - test
