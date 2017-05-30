@@ -53,7 +53,7 @@ reset_github() {
   "private": false
 }
 EOF
-    git push -u origin master
+    git push -f -u origin master
 }
 
 reset_circle_project() {
@@ -72,7 +72,7 @@ recreate_pr() {
     git checkout -b update-button
     sed -i '' 's_<a class="cta cta-red" href="#">Try it now</a>_<a class="cta cta-green" href="#">Sign up now</a>_' uwsgi/fantasticorp/templates/index.html
     git commit -am "Update button"
-    git push origin update-button
+    git push -f origin update-button
     curl -sS -u "$GH_USER:$GH_TOKEN" -X POST -d @- "https://api.github.com/repos/$GH_USER/$GH_REPO/pulls" > /dev/null <<EOF
 {
   "title": "Update signup button",

@@ -50,8 +50,7 @@ jobs:
     working_directory: pixelgroup-home-two-dot-o
     docker:
       - image: gerey/saasdemo-docker-image:latest
-    steps:
-      command: |
+    command: |
         if [ "${CIRCLE_BRANCH}" == "master" ]; then
           docker login -u $DOCKER_USER -e $DOCKER_EMAIL -p $DOCKER_PASS
           docker push {GH-USER}/{GH-REPO}-uwsgi:$IMAGE_TAG
@@ -61,11 +60,6 @@ jobs:
 
 
 
-
-
-
-# deployment:
-  #       piyush sharma vertias
 
 #   staging:
 #     branch: master
