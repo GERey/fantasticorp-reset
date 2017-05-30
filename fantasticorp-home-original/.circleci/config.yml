@@ -53,10 +53,10 @@ jobs:
     steps:
       command: |
         if [ "${CIRCLE_BRANCH}" == "master" ]; then
-          - docker login -u $DOCKER_USER -e $DOCKER_EMAIL -p $DOCKER_PASS
-          - docker push {GH-USER}/{GH-REPO}-uwsgi:$IMAGE_TAG
-          - docker push {GH-USER}/{GH-REPO}-nginx:$IMAGE_TAG
-          - script/deploy.sh prod
+          docker login -u $DOCKER_USER -e $DOCKER_EMAIL -p $DOCKER_PASS
+          docker push {GH-USER}/{GH-REPO}-uwsgi:$IMAGE_TAG
+          docker push {GH-USER}/{GH-REPO}-nginx:$IMAGE_TAG
+          script/deploy.sh prod
         fi
 
 
@@ -87,6 +87,3 @@ workflows:
       - deploy:
           requires:
             - test
-          # filters:
-          #   branches:
-          #     only: try-workflows

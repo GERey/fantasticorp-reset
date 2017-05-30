@@ -91,8 +91,8 @@ source secrets
 #read confirm
 #[[ $confirm = "y" ]] || exit 1
 #if [[ $TRELLO_KEY ]]; then reset_trello; fi
-#recreate_local_project
-#(cd fantasticorp-home-temp && recreate_local_repo)
-#(cd fantasticorp-home-temp && reset_github "$to_delete")
+recreate_local_project
+(cd fantasticorp-home-temp && recreate_local_repo)
+(cd fantasticorp-home-temp && reset_github "$to_delete")
 reset_circle_project
-#(cd fantasticorp-home-temp && recreate_pr)
+(cd fantasticorp-home-temp && recreate_pr)
