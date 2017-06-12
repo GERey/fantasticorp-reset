@@ -23,6 +23,8 @@ jobs:
       - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
       - run: docker push {GH-USER}/{GH-REPO}-uwsgi:${CIRCLE_SHA1}-${CIRCLE_BUILD_NUM}
       - run: docker push {GH-USER}/{GH-REPO}-nginx:${CIRCLE_SHA1}-${CIRCLE_BUILD_NUM} 
+      - run: docker push {GH-USER}/{GH-REPO}-uwsgi:latest
+      - run: docker push {GH-USER}/{GH-REPO}-nginx:latest
 
       # - persist_to_workspace:
       #     root: /var/lib/docker
