@@ -7,7 +7,7 @@ jobs:
 
     # In 2.0, we specify our Ruby version by using a public Docker image
     docker:
-       - image: circleci/python:3.6
+       - image: circleci/ruby:latest
 
     steps:
       - checkout
