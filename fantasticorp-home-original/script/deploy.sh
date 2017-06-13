@@ -61,7 +61,7 @@ deploy() {
     service="$1"
     family="{GH-REPO}"
     cluster="{GH-REPO}"
-    tag="${CIRCLE_SHA1}-${CIRCLE_BUILD_NUM}"
+    tag="${CIRCLE_SHA1}"
     task_def="$(task_definition "$tag")"
     revision="$(register_definition "$family" "$task_def")"
     if [[ $(aws ecs update-service --cluster "$cluster" --service "$service" --task-definition "$revision" | _jq '.service.taskDefinition') != $revision ]]; then
