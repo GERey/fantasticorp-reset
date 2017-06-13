@@ -10,7 +10,7 @@ jobs:
        - image: circleci/ruby:latest
 
     steps:
-      - ls
+      - run: ls -al
       - checkout
 
       - setup_remote_docker:
