@@ -1,13 +1,13 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/pixelgroup-home-two-dot-o
+    working_directory: pixelgroup-home-two-dot-o
     environment:
       IMAGE_TAG: ${CIRCLE_SHA1}
 
     # In 2.0, we specify our Ruby version by using a public Docker image
     docker:
-       - image: circleci/ruby:latest
+       - image: gerey/saasdemo-docker-image:latest
 
     steps:
       - checkout
@@ -28,9 +28,9 @@ jobs:
 
 
   test:
-    working_directory: ~/pixelgroup-home-two-dot-o
+    working_directory: pixelgroup-home-two-dot-o
     docker:
-       - image: circleci/python:3.6
+       - image: gerey/saasdemo-docker-image:latest
 
     steps:
       - checkout
@@ -62,9 +62,9 @@ jobs:
 
   deploy:
     name: Deploy to ECS
-    working_directory: ~/pixelgroup-home-two-dot-o
+    working_directory: pixelgroup-home-two-dot-o
     docker:
-      - image: circleci/python:3.6
+      - image: gerey/saasdemo-docker-image:latest
     
     steps:
       - checkout
