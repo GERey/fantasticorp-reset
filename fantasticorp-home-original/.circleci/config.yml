@@ -24,39 +24,7 @@ jobs:
       - run: docker push {GH-USER}/{GH-REPO}-uwsgi:${CIRCLE_SHA1}-${CIRCLE_BUILD_NUM}
       - run: docker push {GH-USER}/{GH-REPO}-nginx:${CIRCLE_SHA1}-${CIRCLE_BUILD_NUM} 
 
-      # - persist_to_workspace:
-      #     root: /var/lib/docker
-          # paths:
-          #   - echo-output
 
-  build-latest:
-    working_directory: pixelgroup-home-two-dot-o
-    environment:
-      IMAGE_TAG: ${CIRCLE_SHA1}-${CIRCLE_BUILD_NUM}
-
-    # In 2.0, we specify our Ruby version by using a public Docker image
-    docker:
-       - image: gerey/saasdemo-docker-image:latest
-
-    steps:
-      - checkout
-
-      - setup_remote_docker:
-          reusable: true
-      
-      - run: docker build -t {GH-USER}/{GH-REPO}-uwsgi:latest uwsgi
-      - run: docker build -t {GH-USER}/{GH-REPO}-nginx:latest nginx
-      
-
-      #push docker iamge to docker hub
-      - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
-      - run: docker push {GH-USER}/{GH-REPO}-uwsgi:latest
-      - run: docker push {GH-USER}/{GH-REPO}-nginx:latest
-
-      # - persist_to_workspace:
-      #     root: /var/lib/docker
-          # paths:
-          #   - echo-output
 
 
   test:
@@ -72,8 +40,8 @@ jobs:
 
       # - attach_workspace:
       #   at: /var/lib/docker
-      - run: docker pull {GH-USER}/{GH-REPO}-uwsgi:latest 
-      - run: docker pull {GH-USER}/{GH-REPO}-nginx:latest 
+      - run: docker pull {GH-USER}/{GH-REPO}-uwsgi:${CIRCLE_SHA1}-${CIRCLE_BUILD_NUM}
+      - run: docker pull {GH-USER}/{GH-REPO}-nginx:${CIRCLE_SHA1}-${CIRCLE_BUILD_NUM} 
       - run: docker build -t {GH-REPO}-test test
       - run: xxd -l 8 -p /dev/urandom > test_container_name
       - run: docker-compose -p ${CIRCLE_BUILD_NUM} up -d
@@ -111,11 +79,10 @@ workflows:
   version: 2
   test-and-deploy:
     jobs:
-      - build-latest
       - build
       - test:
           requires:
-            - build-latest
+            - build
       - deploy:
           requires:
             - test
