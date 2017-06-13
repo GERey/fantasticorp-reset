@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: pixelgroup-home-two-dot-o
+    working_directory: ~/pixelgroup-home-two-dot-o
     environment:
       IMAGE_TAG: ${CIRCLE_SHA1}
 
@@ -10,7 +10,6 @@ jobs:
        - image: circleci/ruby:latest
 
     steps:
-      - run: ls -al
       - checkout
 
       - setup_remote_docker:
@@ -29,7 +28,7 @@ jobs:
 
 
   test:
-    working_directory: pixelgroup-home-two-dot-o
+    working_directory: ~/pixelgroup-home-two-dot-o
     docker:
        - image: circleci/python:3.6
 
@@ -63,7 +62,7 @@ jobs:
 
   deploy:
     name: Deploy to ECS
-    working_directory: pixelgroup-home-two-dot-o
+    working_directory: ~/pixelgroup-home-two-dot-o
     docker:
       - image: circleci/python:3.6
     
