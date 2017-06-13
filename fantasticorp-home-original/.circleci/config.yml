@@ -65,14 +65,15 @@ jobs:
     working_directory: pixelgroup-home-two-dot-o
     docker:
       - image: gerey/saasdemo-docker-image:latest
+    
     steps:
       - checkout
 
       - run:
-        command: |
-          if [ "${CIRCLE_BRANCH}" == "master" ]; then
-            script/deploy.sh prod
-          fi
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              script/deploy.sh prod
+            fi
 
 
 workflows:
