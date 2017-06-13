@@ -1,7 +1,7 @@
 uwsgi:
-  image: "{GH-USER}/{GH-REPO}-uwsgi:${CIRCLE_SHA1}-${CIRCLE_BUILD_NUM}"
+  image: "{GH-USER}/{GH-REPO}-uwsgi:${CIRCLE_SHA1}"
 nginx:
-  image: "{GH-USER}/{GH-REPO}-nginx:${CIRCLE_SHA1}-${CIRCLE_BUILD_NUM}"
+  image: "{GH-USER}/{GH-REPO}-nginx:${CIRCLE_SHA1}"
   links:
     - uwsgi
   expose:
