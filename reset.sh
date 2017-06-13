@@ -58,6 +58,10 @@ EOF
 
 reset_circle_project() {
     echo "Resetting circle project..."    
+    ##Implement this
+
+
+    echo "Setting Environment Variables"
     curl -sS -H 'Content-Type:application/json; charset=UTF-8' "https://circleci.com/api/v1.1/project/github/${GH_USER}/${GH_REPO}/envvar?circle-token=$CIRCLE_TOKEN"  --data-binary '{"name":"GH_USER","value": "'"$GH_USER"'"}'
     curl -sS -H 'Content-Type:application/json; charset=UTF-8' "https://circleci.com/api/v1.1/project/github/${GH_USER}/${GH_REPO}/envvar?circle-token=$CIRCLE_TOKEN"  --data-binary '{"name":"DOCKER_USER","value": "'"$DOCKER_USER"'"}'
     curl -sS -H 'Content-Type:application/json; charset=UTF-8' "https://circleci.com/api/v1.1/project/github/${GH_USER}/${GH_REPO}/envvar?circle-token=$CIRCLE_TOKEN"  --data-binary '{"name":"DOCKER_PASS","value": "'"$DOCKER_PASS"'"}'
