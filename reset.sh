@@ -60,15 +60,24 @@ reset_circle_project() {
     echo "Resetting circle project..."    
     ##Implement this
 
-
     echo "Setting Environment Variables"
-    curl -sS -H 'Content-Type:application/json; charset=UTF-8' "https://circleci.com/api/v1.1/project/github/${GH_USER}/${GH_REPO}/envvar?circle-token=$CIRCLE_TOKEN"  --data-binary '{"name":"GH_USER","value": "'"$GH_USER"'"}'
-    curl -sS -H 'Content-Type:application/json; charset=UTF-8' "https://circleci.com/api/v1.1/project/github/${GH_USER}/${GH_REPO}/envvar?circle-token=$CIRCLE_TOKEN"  --data-binary '{"name":"DOCKER_USER","value": "'"$DOCKER_USER"'"}'
-    curl -sS -H 'Content-Type:application/json; charset=UTF-8' "https://circleci.com/api/v1.1/project/github/${GH_USER}/${GH_REPO}/envvar?circle-token=$CIRCLE_TOKEN"  --data-binary '{"name":"DOCKER_PASS","value": "'"$DOCKER_PASS"'"}'
-    curl -sS -H 'Content-Type:application/json; charset=UTF-8' "https://circleci.com/api/v1.1/project/github/${GH_USER}/${GH_REPO}/envvar?circle-token=$CIRCLE_TOKEN"  --data-binary '{"name":"AWS_DEFAULT_REGION","value": "'"$AWS_DEFAULT_REGION"'"}'
-    curl -sS -H 'Content-Type:application/json; charset=UTF-8' "https://circleci.com/api/v1.1/project/github/${GH_USER}/${GH_REPO}/envvar?circle-token=$CIRCLE_TOKEN"  --data-binary '{"name":"AWS_ACCESS_KEY_ID","value": "'"$AWS_ACCESS_KEY_ID"'"}'
-    curl -sS -H 'Content-Type:application/json; charset=UTF-8' "https://circleci.com/api/v1.1/project/github/${GH_USER}/${GH_REPO}/envvar?circle-token=$CIRCLE_TOKEN"  --data-binary '{"name":"AWS_SECRET_ACCESS_KEY","value": "'"$AWS_SECRET_ACCESS_KEY"'"}'
+    headers='Content-Type:application/json'
+    URL="https://circleci.com/api/v1.1/project/github/${GH_USER}/${GH_REPO}/envvar?circle-token=$CIRCLE_TOKEN"
+
+    
+    curl -sS -H $headers $URL --data-binary '{"name":"GH_USER","value": "'"$GH_USER"'"}'
+    curl -sS -H $headers $URL --data-binary '{"name":"DOCKER_USER","value": "'"$DOCKER_USER"'"}'
+    curl -sS -H $headers $URL --data-binary '{"name":"DOCKER_PASS","value": "'"$DOCKER_PASS"'"}'
+    curl -sS -H $headers $URL --data-binary '{"name":"AWS_DEFAULT_REGION","value": "'"$AWS_DEFAULT_REGION"'"}'
+    curl -sS -H $headers $URL --data-binary '{"name":"AWS_ACCESS_KEY_ID","value": "'"$AWS_ACCESS_KEY_ID"'"}'
+    curl -sS -H $headers $URL --data-binary '{"name":"AWS_SECRET_ACCESS_KEY","value": "'"$AWS_SECRET_ACCESS_KEY"'"}'
+
     #ssh -i $SSH_KEY ubuntu@${CIRCLE_HOST} "ENV_VAR_MAP='$ENV_VAR_MAP' GH_USER=$GH_USER GH_REPO=$GH_REPO bash" < remote-reset.sh
+}
+
+apply_env_var_key_pair() {
+    curl -sS -H 'Content-Type:application/json; charset=UTF-8' "https://circleci.com/api/v1.1/project/github/${GH_USER}/${GH_REPO}/envvar?circle-token=$CIRCLE_TOKEN"  --data-binary '{"name":"GH_USER","value": "'"$GH_USER"'"}'
+
 }
 
 recreate_pr() {

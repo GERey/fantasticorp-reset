@@ -19,7 +19,7 @@ jobs:
       - run: docker build -t {GH-USER}/{GH-REPO}-nginx:${CIRCLE_SHA1} nginx
       
 
-      #push docker iamge to docker hub
+      #push docker image to docker hub
       - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
       - run: docker push {GH-USER}/{GH-REPO}-uwsgi:${CIRCLE_SHA1}
       - run: docker push {GH-USER}/{GH-REPO}-nginx:${CIRCLE_SHA1}
