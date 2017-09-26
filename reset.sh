@@ -57,12 +57,12 @@ EOF
 }
 
 reset_circle_project() {
-    echo "Resetting circle project..."    
+#    echo "Resetting circle project..."    
     ##Implement this
 
     echo "Setting Environment Variables"
     headers='Content-Type:application/json'
-    URL="https://circleci.com/api/v1.1/project/github/${GH_USER}/${GH_REPO}/envvar?circle-token=$CIRCLE_TOKEN"
+    URL="http://${CIRCLE_HOST}/api/v1.1/project/github/${GH_USER}/${GH_REPO}/envvar?circle-token=$CIRCLE_TOKEN"
 
     
     curl -sS -H $headers $URL --data-binary '{"name":"GH_USER","value": "'"$GH_USER"'"}'
@@ -107,5 +107,5 @@ source secrets
 recreate_local_project
 (cd fantasticorp-home-temp && recreate_local_repo)
 (cd fantasticorp-home-temp && reset_github "$to_delete")
-reset_circle_project
+#reset_circle_project
 (cd fantasticorp-home-temp && recreate_pr)
